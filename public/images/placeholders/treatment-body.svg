@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="Ilustración de referencia: cuidado corporal"><defs>
+  <linearGradient id="wall" x2="1" y2=".4"><stop stop-color="#e5ded0"/><stop offset="1" stop-color="#d0c5b3"/></linearGradient>
+  <linearGradient id="arch" x2="1" y2=".5"><stop stop-color="#a9ac97"/><stop offset="1" stop-color="#d1d1bc"/></linearGradient>
+  <linearGradient id="linen" x2="0" y2="1"><stop stop-color="#f6f2e8"/><stop offset="1" stop-color="#d9d0bd"/></linearGradient>
+  <linearGradient id="ceramic" x2="1" y2=".4"><stop stop-color="#b6a48f"/><stop offset=".5" stop-color="#e3d8c6"/><stop offset="1" stop-color="#c5b49d"/></linearGradient>
+  <linearGradient id="oil" x2="1" y2="0"><stop stop-color="#655f41"/><stop offset=".5" stop-color="#9b9270"/><stop offset="1" stop-color="#68664c"/></linearGradient>
+  <pattern id="grain" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".55" fill="#514e3b" opacity=".12"/><circle cx="4" cy="5" r=".6" fill="#fffdf6" opacity=".4"/></pattern>
+</defs><rect width="1200" height="900" fill="#e9e0d1"/>
+  <path d="M0 0H400L1000 900H650Z" fill="#f9f5e9" opacity=".45"/><path d="M920 0H1200V900H1050L510 0Z" fill="#a9a28b" opacity=".09"/>
+  <path d="M0 680H1200V900H0Z" fill="#d5c8b2"/><path d="M0 680H1200" stroke="#bbb29b" opacity=".5"/>
+  <ellipse cx="665" cy="744" rx="410" ry="45" fill="#6d705b" opacity=".1"/>
+  <g transform="translate(260 555) scale(1.35)"><rect x="0" y="42" width="360" height="74" rx="22" fill="#ded5c2"/><rect x="-8" y="0" width="360" height="75" rx="23" fill="url(#linen)"/><path d="M14 57H326M21 99H333" fill="none" stroke="#bdb7a3" stroke-width="2" opacity=".7"/><path d="M24 8V55M34 8V55M299 8V55M309 8V55" stroke="#c8bfac" opacity=".7"/></g>
+  <g transform="translate(820 402) scale(1)"><rect x="30" y="0" width="54" height="52" rx="7" fill="#575c4b"/><rect x="18" y="45" width="78" height="25" rx="8" fill="#898c71"/><rect x="0" y="62" width="115" height="195" rx="21" fill="url(#oil)"/><rect x="12" y="110" width="91" height="96" rx="1" fill="#e7dfcc"/><text x="58" y="149" fill="#5b604e" font-size="15" font-family="Georgia,serif" text-anchor="middle" letter-spacing="3">SAVIA</text><path d="M37 167H78M43 176H71" stroke="#a6a28c"/><path d="M10 82V225" stroke="#efedd6" opacity=".3" stroke-width="4"/></g>
+  
+  
+  <path d="M895 585H1005L990 718Q950 742 910 718Z" fill="url(#ceramic)"/>
+  <g transform="translate(942 350) scale(1)" fill="none" stroke="#6f7960" stroke-width="3"><path d="M0 240C-5 155 20 60 45-60M12 148C-30 112-47 68-52 34M24 87C74 65 97 25 110-8M32 20C4-1-2-38-9-66"/><g fill="#6f7960" stroke="none"><ellipse cx="-32" cy="85" rx="12" ry="35" transform="rotate(-35 -32 85)"/><ellipse cx="-48" cy="40" rx="11" ry="31" transform="rotate(-20 -48 40)"/><ellipse cx="75" cy="51" rx="12" ry="36" transform="rotate(43 75 51)"/><ellipse cx="102" cy="9" rx="10" ry="30" transform="rotate(28 102 9)"/><ellipse cx="-3" cy="-33" rx="10" ry="30" transform="rotate(-22 -3 -33)"/><ellipse cx="40" cy="-20" rx="10" ry="34" transform="rotate(13 40 -20)"/><ellipse cx="2" cy="153" rx="11" ry="33" transform="rotate(-45 2 153)"/></g></g>
+  <rect width="1200" height="900" fill="url(#grain)"/><text x="600" y="862" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" letter-spacing="3" fill="#605f50">CUIDADO CORPORAL · SAVIA</text></svg>

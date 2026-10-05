@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1200" viewBox="0 0 1000 1200" role="img" aria-label="Ilustración de referencia: nuestro refugio"><defs>
+  <linearGradient id="wall" x2="1" y2=".4"><stop stop-color="#e5ded0"/><stop offset="1" stop-color="#d0c5b3"/></linearGradient>
+  <linearGradient id="arch" x2="1" y2=".5"><stop stop-color="#a9ac97"/><stop offset="1" stop-color="#d1d1bc"/></linearGradient>
+  <linearGradient id="linen" x2="0" y2="1"><stop stop-color="#f6f2e8"/><stop offset="1" stop-color="#d9d0bd"/></linearGradient>
+  <linearGradient id="ceramic" x2="1" y2=".4"><stop stop-color="#b6a48f"/><stop offset=".5" stop-color="#e3d8c6"/><stop offset="1" stop-color="#c5b49d"/></linearGradient>
+  <linearGradient id="oil" x2="1" y2="0"><stop stop-color="#655f41"/><stop offset=".5" stop-color="#9b9270"/><stop offset="1" stop-color="#68664c"/></linearGradient>
+  <pattern id="grain" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".55" fill="#514e3b" opacity=".12"/><circle cx="4" cy="5" r=".6" fill="#fffdf6" opacity=".4"/></pattern>
+</defs><rect width="1000" height="1200" fill="url(#wall)"/>
+  <path d="M0 850H1000V1200H0Z" fill="#c6b9a3"/><path d="M0 850H1000M500 850L170 1200M790 850L965 1200M0 1080H1000" stroke="#b6aa96" fill="none"/>
+  <path d="M280 860V365A245 245 0 0 1 770 365V860Z" fill="#bfb5a0"/>
+  <path d="M304 860V366A222 222 0 0 1 748 366V860Z" fill="url(#arch)"/>
+  <path d="M337 860V380A190 190 0 0 1 717 380V860Z" fill="#d4d4bd"/>
+  <path d="M357 860V385A170 170 0 0 1 697 385V860Z" fill="url(#arch)"/>
+  <path d="M528 218V858M357 497H697" stroke="#e9e4d1" stroke-width="8"/>
+  <path d="M0 120L210 60V850L0 1050Z" fill="#f5edd9" opacity=".3"/>
+  <path d="M700 360L1000 615V1100L700 855Z" fill="#f6f0df" opacity=".22"/>
+  <ellipse cx="501" cy="970" rx="340" ry="48" fill="#968e78" opacity=".18"/>
+  <rect x="180" y="791" width="610" height="120" rx="4" fill="#a49980"/><rect x="207" y="899" width="40" height="106" fill="#9c9077"/><rect x="717" y="899" width="40" height="106" fill="#9c9077"/>
+  <path d="M165 792Q165 758 200 752H764Q801 753 804 790V865H165Z" fill="url(#linen)"/>
+  <path d="M533 754H687V956Q611 974 533 953Z" fill="#a3a58c"/><path d="M546 765V945M560 765V951M669 765V953" stroke="#8f947d" opacity=".5"/>
+  <g transform="translate(225 693) scale(0.55)"><rect x="0" y="42" width="360" height="74" rx="22" fill="#ded5c2"/><rect x="-8" y="0" width="360" height="75" rx="23" fill="url(#linen)"/><path d="M14 57H326M21 99H333" fill="none" stroke="#bdb7a3" stroke-width="2" opacity=".7"/><path d="M24 8V55M34 8V55M299 8V55M309 8V55" stroke="#c8bfac" opacity=".7"/></g>
+  <ellipse cx="883" cy="1027" rx="67" ry="17" fill="#aaa08a" opacity=".3"/><path d="M843 876H915L904 1018Q876 1038 852 1018Z" fill="url(#ceramic)"/>
+  <g transform="translate(870 680) scale(0.85)" fill="none" stroke="#6f7960" stroke-width="3"><path d="M0 240C-5 155 20 60 45-60M12 148C-30 112-47 68-52 34M24 87C74 65 97 25 110-8M32 20C4-1-2-38-9-66"/><g fill="#6f7960" stroke="none"><ellipse cx="-32" cy="85" rx="12" ry="35" transform="rotate(-35 -32 85)"/><ellipse cx="-48" cy="40" rx="11" ry="31" transform="rotate(-20 -48 40)"/><ellipse cx="75" cy="51" rx="12" ry="36" transform="rotate(43 75 51)"/><ellipse cx="102" cy="9" rx="10" ry="30" transform="rotate(28 102 9)"/><ellipse cx="-3" cy="-33" rx="10" ry="30" transform="rotate(-22 -3 -33)"/><ellipse cx="40" cy="-20" rx="10" ry="34" transform="rotate(13 40 -20)"/><ellipse cx="2" cy="153" rx="11" ry="33" transform="rotate(-45 2 153)"/></g></g>
+  <path d="M95 0V380" stroke="#8e8873" stroke-width="2"/><ellipse cx="95" cy="398" rx="50" ry="30" fill="#eae1cb"/><ellipse cx="95" cy="414" rx="46" ry="12" fill="#c9bda4"/>
+  <rect width="1000" height="1200" fill="url(#grain)"/><text x="500" y="1162" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" letter-spacing="3" fill="#605f50">NUESTRO REFUGIO · SAVIA</text></svg>
