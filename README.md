@@ -22,7 +22,7 @@ npm run preview    # Vista de la compilación de producción
 ```
 
 Si Chromium no está instalado para Playwright: `npx playwright install chromium`.
-Las pruebas usan el puerto 5198 y nunca reutilizan servidores ajenos. Las capturas quedan en `test-results/` (ignorado por Git). La prueba de reemplazo usa una imagen temporal y la elimina al terminar; se omite si ya existe una foto real.
+Las pruebas usan el puerto 5198 y nunca reutilizan servidores ajenos. Las capturas quedan en `test-results/` (ignorado por Git). La prueba de recuperación simula JPG dañados en el navegador; nunca modifica las fotografías originales.
 
 ## Personalización
 
@@ -42,29 +42,30 @@ Los textos editoriales están en sus secciones. Al cambiar de marca, actualiza t
 
 ## Fotografías
 
-Coloca estos archivos directamente en **`public/images/`**. Respeta los nombres, minúsculas y extensión `.webp`.
+Las fotografías actuales están en **`public/images/`**, con extensión `.jpg`. La carpeta `placeholders/` contiene únicamente los fallbacks SVG. La configuración conserva los nombres elegidos por el usuario:
 
-| Archivo exacto                | Dimensiones recomendadas | Proporción |
-| ----------------------------- | ------------------------ | ---------- |
-| `spa-hero.webp`               | 1400 × 1700 px           | 14:17      |
-| `spa-about.webp`              | 1000 × 1200 px           | 5:6        |
-| `treatment-massage.webp`      | 1200 × 900 px            | 4:3        |
-| `treatment-facial.webp`       | 1200 × 900 px            | 4:3        |
-| `treatment-aromatherapy.webp` | 1200 × 900 px            | 4:3        |
-| `treatment-body.webp`         | 1200 × 900 px            | 4:3        |
-| `spa-interior-1.webp`         | 1200 × 1500 px           | 4:5        |
-| `spa-interior-2.webp`         | 1600 × 1000 px           | 8:5        |
-| `spa-interior-3.webp`         | 900 × 1000 px            | 9:10       |
-| `spa-interior-4.webp`         | 900 × 1000 px            | 9:10       |
-| `spa-social-1.webp`           | 1000 × 1000 px           | 1:1        |
-| `spa-social-2.webp`           | 1000 × 1000 px           | 1:1        |
-| `spa-social-3.webp`           | 1000 × 1000 px           | 1:1        |
+| Uso en `spa.images`         | Archivo actual      | Fallback SVG                 |
+| --------------------------- | ------------------- | ---------------------------- |
+| hero                        | `spa-espacio.jpg`   | `spa-hero.svg`               |
+| about                       | `spa-about.jpg`     | `spa-about.svg`              |
+| massage                     | `spa-corporal.jpg`  | `treatment-massage.svg`      |
+| facial                      | `masaje-facial.jpg` | `treatment-facial.svg`       |
+| aromatherapy                | `spa-1.jpg`         | `treatment-aromatherapy.svg` |
+| body                        | `spa-ritual.jpg`    | `treatment-body.svg`         |
+| interior1                   | `spa-2.jpg`         | `spa-interior-1.svg`         |
+| interior2                   | `spa-3.jpg`         | `spa-interior-2.svg`         |
+| pausa inmersiva             | `spa-horizontal.jpg`| `spa-interior-2.svg`         |
+| interior3                   | `spa-4.jpg`         | `spa-interior-3.svg`         |
+| interior4                   | `spa-5.jpg`         | `spa-interior-4.svg`         |
+| social1                     | `spa-3.jpg`         | `spa-social-1.svg`           |
+| social2                     | `spa-2.jpg`         | `spa-social-2.svg`           |
+| social3                     | `spa-3.jpg`         | `spa-social-3.svg`           |
 
 Mantén el sujeto principal en la zona central y deja margen alrededor: `object-fit: cover` adapta el recorte en móvil y escritorio. El hero tiene prioridad de carga; las demás imágenes usan carga diferida. No hay imágenes remotas ni peticiones a servicios de imágenes.
 
-**No necesitas editar componentes.** El plugin pequeño de `vite.config.ts` detecta los WebP existentes y actualiza la página al agregarlos o quitarlos durante desarrollo. En producción, vuelve a ejecutar el build y desplegar cuando añadas fotos; un alojamiento estático no puede detectar cambios del equipo local.
+**No necesitas editar componentes.** El plugin pequeño de `vite.config.ts` detecta los JPG existentes y actualiza la página al agregarlos o quitarlos durante desarrollo. En producción, vuelve a ejecutar el build y desplegar cuando añadas fotos; un alojamiento estático no puede detectar cambios del equipo local.
 
-Cada archivo tiene un fallback con el mismo nombre y extensión `.svg` en `public/images/placeholders/`: 13 ilustraciones locales de interiores, lino, cerámica y esencias. `ImageWithFallback` también recupera el fallback si la foto está dañada. Se evitan solicitudes 404 cuando aún no hay fotos. Para regenerar las ilustraciones: `npm run placeholders`.
+Los fallbacks se configuran por separado en el quinto argumento de `image()` en `site.ts`. Puedes cambiar el nombre de un JPG conservando su SVG de respaldo. `ImageWithFallback` también recupera el fallback si la foto está dañada. Se evitan solicitudes 404 cuando aún no hay fotos. Para regenerar las ilustraciones: `npm run placeholders`.
 
 ## Estructura
 
@@ -73,7 +74,7 @@ src/
   components/
     layout/       Navbar y Footer
     sections/     Hero, Philosophy, Experiences, SensoryStatement,
-                  AboutSpa, Gallery, Testimonials, WhatsAppCTA,
+                  AboutSpa, ImmersivePause, Gallery, Testimonials, WhatsAppCTA,
                   Location y SocialGallery
     ui/           ImageWithFallback, Reveal, SectionHeading, WhatsAppButton
   data/site.ts    Datos comerciales
@@ -85,7 +86,7 @@ public/
   images/placeholders/  13 SVG
   favicon.svg
 scripts/          Generación reproducible de fallbacks
- tests/           Pruebas de navegador y accesibilidad
+tests/            Pruebas de navegador y accesibilidad
 ```
 
 ## Diseño y decisiones
@@ -102,7 +103,7 @@ scripts/          Generación reproducible de fallbacks
 
 ## Verificación
 
-15 pruebas de navegador cubren:
+16 pruebas de navegador cubren:
 
 - Anchos de 320, 375, 390, 430, 768, 1024, 1280, 1440 y 1920 px; ausencia de desbordamiento horizontal.
 - Navegación, imágenes cargadas, ausencia de errores de consola y de solicitudes externas al abrir la landing.
@@ -111,7 +112,16 @@ scripts/          Generación reproducible de fallbacks
 - Enlaces legales y separación del botón flotante respecto al pie de página.
 - Movimiento normal y `prefers-reduced-motion`, incluido cambio de preferencia en vivo.
 - Auditoría axe WCAG A/AA en escritorio, móvil y menú abierto.
-- Incorporación automática de WebP y recuperación ante imagen dañada.
+- Recuperación de todas las fotografías JPG mediante sus fallbacks SVG.
+- Navegación activa y geometría estable al compactarse el navbar.
+
+## Refinamiento Savia V2
+
+La pasada con `impeccable` conserva paleta, fuentes, hero arqueado, textos, tratamientos y rutas fotográficas. Experiencias usa cuatro proporciones (4:5, 3:2, 5:6 y 2:1) con alternancia editorial; la galería tiene márgenes y alturas independientes; Instagram combina una imagen pequeña vertical, una protagonista desplazada y una horizontal. En móvil las fotografías recuperan el ancho útil y mantienen un escalonamiento moderado, sin carruseles ni controles nuevos.
+
+`ImmersivePause.tsx`, entre Sobre Savia y Galería, utiliza `spa.images.immersive` (`spa-horizontal.jpg`) y conserva `spa-interior-2.svg` como fallback. El título es «Un refugio para bajar el ritmo».
+
+`Reveal` admite variantes `text`, `image`, `fade` y `line`. Sus tiempos están centralizados en `src/index.css`: texto 650 ms, fotografía 850 ms, interacción 300 ms. Las fotos revelan su encuadre con una máscara y un zoom de 1.025 a 1; las líneas se dibujan mediante transformaciones. Todo aparece directamente con movimiento reducido. El navbar conserva su espacio en el documento al compactarse visualmente, para evitar saltos. No se añadieron dependencias.
 
 La auditoría automática no reemplaza una revisión humana con lector de pantalla y un teléfono físico.
 

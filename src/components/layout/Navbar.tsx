@@ -17,6 +17,27 @@ export function Navbar({ scrolled }: { scrolled: boolean }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const toggle = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
+  const [activeHref, setActiveHref] = useState("#inicio");
+
+  useEffect(() => {
+    const sections = navigation
+      .map(({ href }) => document.querySelector<HTMLElement>(href))
+      .filter((section): section is HTMLElement => section !== null);
+    const observer = new IntersectionObserver(
+      () => {
+        const current = [...sections]
+          .reverse()
+          .find(
+            (section) =>
+              section.getBoundingClientRect().top <= window.innerHeight * 0.35,
+          );
+        setActiveHref(current ? `#${current.id}` : "#inicio");
+      },
+      { rootMargin: "-18% 0px -62% 0px" },
+    );
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (!open) return;
@@ -42,7 +63,11 @@ export function Navbar({ scrolled }: { scrolled: boolean }) {
         <Wordmark />
         <nav className="desktop-nav" aria-label="Navegación principal">
           {navigation.map((item) => (
-            <a key={item.href} href={item.href}>
+            <a
+              key={item.href}
+              href={item.href}
+              aria-current={activeHref === item.href ? "location" : undefined}
+            >
               {item.label}
             </a>
           ))}
@@ -89,7 +114,12 @@ export function Navbar({ scrolled }: { scrolled: boolean }) {
           </div>
           <nav aria-label="Navegación móvil">
             {navigation.map((item, index) => (
-              <a key={item.href} href={item.href} onClick={close}>
+              <a
+                key={item.href}
+                href={item.href}
+                onClick={close}
+                aria-current={activeHref === item.href ? "location" : undefined}
+              >
                 <small>0{index + 1}</small>
                 {item.label}
                 <ArrowUpRight size={19} aria-hidden="true" />

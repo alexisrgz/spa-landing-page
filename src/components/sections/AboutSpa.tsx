@@ -33,15 +33,15 @@ export function AboutSpa() {
           ))}
         </ol>
       </Reveal>
-      <Reveal className="about-art" delay={100}>
-        <div className="about-image image-hover">
+      <div className="about-art">
+        <Reveal className="about-image image-hover" variant="image" delay={120}>
           <ImageWithFallback image={spa.images.interior1} />
-        </div>
+        </Reveal>
         <div className="about-caption">
           <span>Naturalmente, tú.</span>
           <span>{spa.tagline}</span>
         </div>
-      </Reveal>
+      </div>
     </section>
   );
 }

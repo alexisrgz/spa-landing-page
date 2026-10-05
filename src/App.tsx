@@ -6,6 +6,7 @@ import { Philosophy } from "./components/sections/Philosophy";
 import { Experiences } from "./components/sections/Experiences";
 import { SensoryStatement } from "./components/sections/SensoryStatement";
 import { AboutSpa } from "./components/sections/AboutSpa";
+import { ImmersivePause } from "./components/sections/ImmersivePause";
 import { Gallery } from "./components/sections/Gallery";
 import { Testimonials } from "./components/sections/Testimonials";
 import { WhatsAppCTA } from "./components/sections/WhatsAppCTA";
@@ -33,6 +34,7 @@ export default function App() {
         <Experiences />
         <SensoryStatement />
         <AboutSpa />
+        <ImmersivePause />
         <Gallery />
         <Testimonials />
         <WhatsAppCTA />

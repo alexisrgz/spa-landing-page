@@ -26,23 +26,35 @@ export function Experiences() {
         </Reveal>
         <div className="experience-list">
           {experiences.map((experience) => (
-            <Reveal key={experience.id} className="experience-row">
-              <span className="experience-number">{experience.id}</span>
-              <div className="experience-image image-hover">
+            <article
+              key={experience.id}
+              className={`experience-row experience-${experience.id}`}
+              aria-labelledby={`experience-${experience.id}-title`}
+            >
+              <Reveal className="experience-number" variant="fade">
+                {experience.id}
+              </Reveal>
+              <Reveal
+                className="experience-image image-hover"
+                variant="image"
+                delay={60}
+              >
                 <ImageWithFallback
                   image={experience.image}
-                  sizes="(max-width: 767px) 90vw, 35vw"
+                  sizes="(max-width: 767px) 90vw, 50vw"
                 />
-              </div>
-              <div className="experience-copy">
+              </Reveal>
+              <Reveal className="experience-copy" delay={140}>
                 <p className="eyebrow">{experience.category}</p>
-                <h3>{experience.name}</h3>
+                <h3 id={`experience-${experience.id}-title`}>
+                  {experience.name}
+                </h3>
                 <p>{experience.description}</p>
                 <WhatsAppButton variant="text" experience={experience.name}>
                   Consultar por WhatsApp
                 </WhatsAppButton>
-              </div>
-            </Reveal>
+              </Reveal>
+            </article>
           ))}
         </div>
       </div>

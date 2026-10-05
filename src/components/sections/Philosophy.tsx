@@ -10,13 +10,15 @@ export function Philosophy() {
       className="philosophy section-space container"
       aria-labelledby="philosophy-title"
     >
-      <Reveal className="philosophy-image">
-        <ImageWithFallback image={spa.images.about} />
+      <div className="philosophy-image">
+        <Reveal variant="image" className="philosophy-photo image-hover">
+          <ImageWithFallback image={spa.images.about} />
+        </Reveal>
         <span className="image-footnote">
           Lo esencial está en los pequeños detalles.
         </span>
-      </Reveal>
-      <Reveal className="philosophy-copy" delay={100}>
+      </div>
+      <Reveal className="philosophy-copy" delay={160}>
         <SectionHeading eyebrow="Nuestra filosofía" id="philosophy-title">
           Un espacio creado
           <br />

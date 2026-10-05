@@ -30,10 +30,15 @@ export function SocialGallery() {
       </Reveal>
       <div className="social-grid">
         {socialGallery.map((image, index) => (
-          <Reveal key={image.src} delay={index * 80} className="image-hover">
+          <Reveal
+            key={`${index}-${image.src}`}
+            delay={index * 140}
+            className={`social-photo social-photo-${index + 1} image-hover`}
+            variant="image"
+          >
             <ImageWithFallback
               image={image}
-              sizes="(max-width: 600px) 45vw, 33vw"
+              sizes="(max-width: 767px) 90vw, 40vw"
             />
           </Reveal>
         ))}

@@ -4,7 +4,7 @@ import { WhatsAppButton } from "../ui/WhatsAppButton";
 export function WhatsAppCTA() {
   return (
     <section className="contact-cta" aria-labelledby="contact-title">
-      <Reveal className="container contact-inner">
+      <Reveal className="container contact-inner" variant="fade">
         <div>
           <p className="eyebrow">Haz de ti una prioridad</p>
           <h2 id="contact-title">

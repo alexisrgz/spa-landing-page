@@ -1,7 +1,5 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { existsSync } from "node:fs";
-import { writeFile, unlink } from "node:fs/promises";
 import { spa } from "../src/data/site";
 
 test("complete page, valid navigation, local assets and WhatsApp links", async ({
@@ -23,7 +21,7 @@ test("complete page, valid navigation, local assets and WhatsApp links", async (
   await page.goto("/");
   await expect(page).toHaveTitle("Savia Spa | Wellness & Beauty en Mazatlán");
   await expect(page.locator("h1")).toHaveCount(1);
-  await expect(page.locator("main section")).toHaveCount(10);
+  await expect(page.locator("main section")).toHaveCount(11);
   for (const link of await page.locator('a[href^="#"]').all()) {
     const href = await link.getAttribute("href");
     await expect(page.locator(href!)).toHaveCount(1);
@@ -45,6 +43,12 @@ test("complete page, valid navigation, local assets and WhatsApp links", async (
       .toBeGreaterThan(0);
     await expect(image).toHaveAttribute("src", /^\/images\//);
   }
+  for (const link of await page
+    .locator(`a[href="${spa.instagramUrl}"]`)
+    .all()) {
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  }
   expect(errors).toEqual([]);
   expect(remoteRequests).toEqual([]);
 });
@@ -63,7 +67,7 @@ for (const width of [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
       );
       expect(overflow).toBeLessThanOrEqual(1);
     }
-    if ([375, 768, 1440].includes(width)) {
+    {
       await page.evaluate(() => window.scrollTo(0, 0));
       await expect(page.locator(".site-header")).not.toHaveClass(/is-scrolled/);
       await page.screenshot({
@@ -73,6 +77,22 @@ for (const width of [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
         path: testInfo.outputPath(`savia-${width}.png`),
         fullPage: true,
       });
+      if ([375, 768, 1440].includes(width)) {
+        for (const name of [
+          "experiences",
+          "gallery",
+          "social",
+          "immersive-pause",
+        ]) {
+          await page
+            .locator(`.${name}`)
+            .screenshot({
+              path: testInfo.outputPath(`${name}-${width}.png`),
+              style:
+                ".site-header, .floating-whatsapp, .skip-link { visibility: hidden !important; }",
+            });
+        }
+      }
     }
   });
 }
@@ -176,56 +196,99 @@ test("scroll reveals work with normal motion and react to reduced motion", async
   await expect(section).toHaveAttribute("data-reveal", "pending");
   await section.scrollIntoViewIfNeeded();
   await expect(section).toHaveAttribute("data-reveal", "visible");
+  const photo = page.locator(".experience-image").first();
+  const reservedSize = await photo.evaluate((element) => ({
+    width: element.clientWidth,
+    height: element.clientHeight,
+  }));
+  await photo.scrollIntoViewIfNeeded();
+  await expect(photo).toHaveAttribute("data-reveal", "visible");
+  await expect
+    .poll(() => photo.evaluate((element) => getComputedStyle(element).opacity))
+    .toBe("1");
+  expect(
+    await photo.evaluate((element) => ({
+      width: element.clientWidth,
+      height: element.clientHeight,
+    })),
+  ).toEqual(reservedSize);
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator('[data-reveal="pending"]')).toHaveCount(0);
 });
 
-test("adding a local WebP replaces the fallback automatically; broken files recover", async ({
+test("configured JPG photographs recover their independent SVG fallbacks", async ({
   page,
 }) => {
-  const fixture = "public/images/spa-hero.webp";
-  test.skip(
-    existsSync(fixture),
-    "Preserve the real photograph when one has been added.",
-  );
   await page.goto("/");
   const hero = page.locator(".hero-image-frame img");
-  await expect(hero).toHaveAttribute("data-fallback", "true");
-  const imageData = await page.evaluate(() => {
-    const canvas = document.createElement("canvas");
-    canvas.width = 4;
-    canvas.height = 4;
-    return canvas.toDataURL("image/webp").split(",")[1];
-  });
-  try {
-    await writeFile(fixture, Buffer.from(imageData, "base64"));
-    await expect(hero).toHaveAttribute("src", "/images/spa-hero.webp", {
-      timeout: 10000,
-    });
-    await expect
-      .poll(() =>
-        hero.evaluate((img) => (img as HTMLImageElement).naturalWidth),
-      )
-      .toBe(4);
-    await page.route("**/images/spa-hero.webp", (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: "image/webp",
-        body: "invalid image fixture",
-      }),
-    );
-    await page.reload();
-    await expect(hero).toHaveAttribute("data-fallback", "true");
-    await expect
-      .poll(() =>
-        hero.evaluate((img) => (img as HTMLImageElement).naturalWidth),
-      )
-      .toBeGreaterThan(4);
-  } finally {
-    await unlink(fixture);
-  }
-  await expect(hero).toHaveAttribute(
-    "src",
-    "/images/placeholders/spa-hero.svg",
+  await expect(hero).toHaveAttribute("src", spa.images.hero.src);
+  await page.route("**/images/*.jpg", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "image/jpeg",
+      body: "invalid image fixture",
+    }),
   );
+  await page.reload();
+  for (const image of await page.locator("main img").all()) {
+    await image.scrollIntoViewIfNeeded();
+    await expect(image).toHaveAttribute("data-fallback", "true");
+    await expect(image).toHaveAttribute(
+      "src",
+      /^\/images\/placeholders\/.+\.svg$/,
+    );
+    await expect
+      .poll(() =>
+        image.evaluate((img) => (img as HTMLImageElement).naturalWidth),
+      )
+      .toBeGreaterThan(0);
+  }
+});
+
+test("active navigation follows sections and compact header keeps document geometry", async ({
+  page,
+}) => {
+  await page.goto("/");
+  const header = page.locator(".site-header");
+  const initialHeight = await header.evaluate(
+    (element) => element.getBoundingClientRect().height,
+  );
+  const mainTop = await page
+    .locator("main")
+    .evaluate(
+      (element) => element.getBoundingClientRect().top + window.scrollY,
+    );
+  for (const id of [
+    "experiencias",
+    "nosotros",
+    "galeria",
+    "testimonios",
+    "ubicacion",
+    "inicio",
+  ]) {
+    await page
+      .locator(`#${id}`)
+      .evaluate((element) =>
+        window.scrollTo(
+          0,
+          element.getBoundingClientRect().top + window.scrollY - 112,
+        ),
+      );
+    await expect(page.locator(`.desktop-nav a[href="#${id}"]`)).toHaveAttribute(
+      "aria-current",
+      "location",
+    );
+    expect(
+      await header.evaluate(
+        (element) => element.getBoundingClientRect().height,
+      ),
+    ).toBe(initialHeight);
+    expect(
+      await page
+        .locator("main")
+        .evaluate(
+          (element) => element.getBoundingClientRect().top + window.scrollY,
+        ),
+    ).toBeCloseTo(mainTop, 0);
+  }
 });

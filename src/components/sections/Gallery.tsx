@@ -28,7 +28,8 @@ export function Gallery() {
           <Reveal
             key={image.src}
             className={`gallery-item gallery-item-${index + 1} image-hover`}
-            delay={index * 60}
+            variant="image"
+            delay={index * 100}
           >
             <ImageWithFallback
               image={image}

@@ -4,10 +4,12 @@ export function Reveal({
   children,
   className = "",
   delay = 0,
+  variant = "text",
 }: {
   children: ReactNode;
   className?: string;
   delay?: number;
+  variant?: "text" | "image" | "fade" | "line";
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -44,6 +46,7 @@ export function Reveal({
     <div
       ref={ref}
       className={`reveal ${className}`}
+      data-reveal-variant={variant}
       style={{ "--reveal-delay": `${delay}ms` } as CSSProperties}
     >
       {children}

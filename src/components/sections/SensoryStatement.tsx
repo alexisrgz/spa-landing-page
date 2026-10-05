@@ -10,12 +10,14 @@ export function SensoryStatement() {
   return (
     <section className="sensory section-space" aria-labelledby="sensory-title">
       <div className="container">
-        <Reveal className="sensory-heading">
+        <Reveal className="sensory-heading" variant="fade">
           <p className="eyebrow">El arte de estar presente</p>
           <h2 id="sensory-title">
             Respira. <em>Desconecta.</em> Renueva.
           </h2>
-          <span className="sensory-rule" aria-hidden="true" />
+          <Reveal className="sensory-rule" variant="line">
+            <span className="sr-only">Una pausa para ti.</span>
+          </Reveal>
         </Reveal>
         <div className="sensory-concepts">
           {concepts.map(([title, description], index) => (
