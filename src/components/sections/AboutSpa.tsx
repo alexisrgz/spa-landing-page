@@ -34,7 +34,7 @@ export function AboutSpa() {
         </ol>
       </Reveal>
       <div className="about-art">
-        <Reveal className="about-image image-hover" variant="image" delay={120}>
+        <Reveal className="about-image image-hover image-shape-organic-right" variant="image" delay={120}>
           <ImageWithFallback image={spa.images.interior1} />
         </Reveal>
         <div className="about-caption">

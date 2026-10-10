@@ -3,6 +3,8 @@ import { socialGallery, spa } from "../../data/site";
 import { ImageWithFallback } from "../ui/ImageWithFallback";
 import { Reveal } from "../ui/Reveal";
 
+const photoShapes = ["organic-left", "arch", "organic-right"];
+
 export function SocialGallery() {
   return (
     <section
@@ -28,17 +30,22 @@ export function SocialGallery() {
           <span className="sr-only"> — Ver Instagram</span>
         </a>
       </Reveal>
-      <div className="social-grid">
+      <div
+        className="social-grid"
+        role="region"
+        aria-label="Fotografías de Savia en Instagram"
+        tabIndex={0}
+      >
         {socialGallery.map((image, index) => (
           <Reveal
             key={`${index}-${image.src}`}
             delay={index * 140}
-            className={`social-photo social-photo-${index + 1} image-hover`}
+            className={`social-photo social-photo-${index + 1} image-hover image-shape-${photoShapes[index]}`}
             variant="image"
           >
             <ImageWithFallback
               image={image}
-              sizes="(max-width: 767px) 90vw, 40vw"
+              sizes="(max-width: 767px) 80vw, 340px"
             />
           </Reveal>
         ))}

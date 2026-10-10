@@ -11,7 +11,7 @@ export function Philosophy() {
       aria-labelledby="philosophy-title"
     >
       <div className="philosophy-image">
-        <Reveal variant="image" className="philosophy-photo image-hover">
+        <Reveal variant="image" className="philosophy-photo image-hover image-shape-organic-left">
           <ImageWithFallback image={spa.images.about} />
         </Reveal>
         <span className="image-footnote">

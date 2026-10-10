@@ -53,13 +53,19 @@ test("complete page, valid navigation, local assets and WhatsApp links", async (
   expect(remoteRequests).toEqual([]);
 });
 
-for (const width of [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
+for (const width of [320, 360, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
   test(`responsive layout at ${width}px with no horizontal overflow`, async ({
     page,
   }, testInfo) => {
-    await page.setViewportSize({ width, height: 900 });
+    const height = ({ 375: 812, 390: 844, 430: 932 } as Record<number, number>)[width] ?? 900;
+    await page.setViewportSize({ width, height });
     await page.goto("/");
     await page.evaluate(() => document.fonts.ready);
+    for (const image of await page.locator("main img").all()) {
+      await image.scrollIntoViewIfNeeded();
+      await image.evaluate((element) => (element as HTMLImageElement).decode());
+    }
+    await page.locator(".social-grid").evaluate((element) => element.scrollLeft = 0);
     for (const section of await page.locator("main section, footer").all()) {
       await section.scrollIntoViewIfNeeded();
       const overflow = await page.evaluate(
@@ -77,7 +83,7 @@ for (const width of [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
         path: testInfo.outputPath(`savia-${width}.png`),
         fullPage: true,
       });
-      if ([375, 768, 1440].includes(width)) {
+      {
         for (const name of [
           "experiences",
           "gallery",
@@ -291,4 +297,80 @@ test("active navigation follows sections and compact header keeps document geome
         ),
     ).toBeCloseTo(mainTop, 0);
   }
+});
+
+test("photographs keep useful resolution and a separate editorial pause", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+
+  const immersiveImage = page.locator(".immersive-frame img");
+  await immersiveImage.scrollIntoViewIfNeeded();
+  await expect
+    .poll(() =>
+      immersiveImage.evaluate(
+        (image) => (image as HTMLImageElement).naturalWidth,
+      ),
+    )
+    .toBeGreaterThan(0);
+  const immersiveScale = await immersiveImage.evaluate((image) => {
+    const photo = image as HTMLImageElement;
+    return {
+      renderedWidth: photo.getBoundingClientRect().width,
+      renderedHeight: photo.getBoundingClientRect().height,
+      naturalWidth: photo.naturalWidth,
+      naturalHeight: photo.naturalHeight,
+    };
+  });
+  expect(immersiveScale.renderedWidth).toBeLessThanOrEqual(420);
+  // Cover can upscale a landscape source by its height even in a narrow frame.
+  expect(Math.max(
+    immersiveScale.renderedWidth / immersiveScale.naturalWidth,
+    immersiveScale.renderedHeight / immersiveScale.naturalHeight,
+  )).toBeLessThanOrEqual(1.25);
+  const desktopCopy = await page.locator(".immersive-copy").boundingBox();
+  const desktopPhoto = await immersiveImage.boundingBox();
+  expect(desktopCopy!.x + desktopCopy!.width).toBeLessThan(desktopPhoto!.x);
+
+  for (const image of await page.locator(".experience-image img").all()) {
+    await image.scrollIntoViewIfNeeded();
+    expect((await image.boundingBox())!.width).toBeLessThanOrEqual(380);
+  }
+
+  const socialWidths = await page.locator(".social-photo").evaluateAll((items) =>
+    items.map((item) => item.getBoundingClientRect().width),
+  );
+  expect(Math.max(...socialWidths) / Math.min(...socialWidths)).toBeLessThan(1.1);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const immersiveFrame = page.locator(".immersive-frame");
+  const mobilePause = await immersiveFrame.boundingBox();
+  const mobileCopy = await page.locator(".immersive-copy").boundingBox();
+  expect(mobileCopy!.y + mobileCopy!.height).toBeLessThan(mobilePause!.y);
+  expect(mobilePause!.height).toBeLessThan(430);
+});
+
+test("mobile Instagram snaps through all photographs with keyboard access", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const strip = page.getByRole("region", { name: "Fotografías de Savia en Instagram" });
+  await strip.scrollIntoViewIfNeeded();
+  const geometry = await strip.evaluate((element) => {
+    const first = element.children[0].getBoundingClientRect();
+    const next = element.children[1].getBoundingClientRect();
+    const bounds = element.getBoundingClientRect();
+    return { firstWidth: first.width, nextLeft: next.left, right: bounds.right };
+  });
+  expect(geometry.firstWidth).toBeGreaterThan(390 * 0.77);
+  expect(geometry.nextLeft).toBeLessThan(geometry.right);
+  await strip.focus();
+  await page.keyboard.press("ArrowRight");
+  await expect.poll(() => strip.evaluate((element) => element.scrollLeft)).toBeGreaterThan(0);
+  await strip.evaluate((element) => element.scrollTo({ left: element.scrollWidth, behavior: "instant" }));
+  await expect.poll(() => strip.evaluate((element) =>
+    Math.abs(element.scrollWidth - element.clientWidth - element.scrollLeft),
+  )).toBeLessThanOrEqual(1);
+  await expect(page.locator(".social-photo-3")).toBeInViewport({ ratio: 0.9 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - innerWidth)).toBeLessThanOrEqual(1);
 });

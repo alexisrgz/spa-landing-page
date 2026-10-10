@@ -4,6 +4,8 @@ import { Reveal } from "../ui/Reveal";
 import { SectionHeading } from "../ui/SectionHeading";
 import { WhatsAppButton } from "../ui/WhatsAppButton";
 
+const photoShapes = ["arch", "organic-right", "arch", "organic-left"];
+
 export function Experiences() {
   return (
     <section
@@ -25,7 +27,7 @@ export function Experiences() {
           </p>
         </Reveal>
         <div className="experience-list">
-          {experiences.map((experience) => (
+          {experiences.map((experience, index) => (
             <article
               key={experience.id}
               className={`experience-row experience-${experience.id}`}
@@ -35,13 +37,13 @@ export function Experiences() {
                 {experience.id}
               </Reveal>
               <Reveal
-                className="experience-image image-hover"
+                className={`experience-image image-hover image-shape-${photoShapes[index]}`}
                 variant="image"
                 delay={60}
               >
                 <ImageWithFallback
                   image={experience.image}
-                  sizes="(max-width: 767px) 90vw, 50vw"
+                  sizes="(max-width: 767px) 86vw, (max-width: 1099px) 40vw, 380px"
                 />
               </Reveal>
               <Reveal className="experience-copy" delay={140}>

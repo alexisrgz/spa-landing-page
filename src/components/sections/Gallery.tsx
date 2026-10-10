@@ -4,6 +4,8 @@ import { ImageWithFallback } from "../ui/ImageWithFallback";
 import { Reveal } from "../ui/Reveal";
 import { SectionHeading } from "../ui/SectionHeading";
 
+const photoShapes = ["organic-left", "organic-right", "arch", "editorial"];
+
 export function Gallery() {
   return (
     <section
@@ -27,7 +29,7 @@ export function Gallery() {
         {gallery.map((image, index) => (
           <Reveal
             key={image.src}
-            className={`gallery-item gallery-item-${index + 1} image-hover`}
+            className={`gallery-item gallery-item-${index + 1} image-hover image-shape-${photoShapes[index]}`}
             variant="image"
             delay={index * 100}
           >
